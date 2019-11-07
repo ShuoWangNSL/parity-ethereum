@@ -116,7 +116,7 @@ mod signer;
 mod snapshot_cmd;
 mod upgrade;
 mod user_defaults;
-mod db;
+pub mod db;
 
 use std::fs::File;
 use std::io::BufReader;
