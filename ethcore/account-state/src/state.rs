@@ -1135,6 +1135,11 @@ impl<B: Backend> State<B> {
 	pub fn db(&self) -> &B {
 		&self.db
 	}
+
+	/// Get a mutable reference to the underlying state DB.
+	pub fn db_mut(&mut self) -> &mut B {
+		&mut self.db
+	}
 }
 
 //// TODO: cloning for `State` shouldn't be possible in general; Remove this and use
