@@ -178,7 +178,7 @@ impl<B: Backend> ExecutiveState for State<B> {
 		tracing: bool
 	) -> ApplyResult<FlatTrace, VMTrace> {
 		if tracing {
-			let options = TransactOptions::with_tracing();
+			let options = TransactOptions::with_tracing_and_vm_tracing();
 			self.apply_with_tracing(env_info, machine, t, options.tracer, options.vm_tracer)
 		} else {
 			let options = TransactOptions::with_no_tracing();
@@ -201,6 +201,7 @@ impl<B: Backend> ExecutiveState for State<B> {
 			V: trace::VMTracer,
 	{
 		let options = TransactOptions::new(tracer, vm_tracer);
+		let options = options.dont_check_nonce();//newly added to skip nonce checking
 		let e = execute(self, env_info, machine, t, options, false)?;
 		let params = machine.params();
 
