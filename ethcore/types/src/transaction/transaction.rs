@@ -414,7 +414,7 @@ impl UnverifiedTransaction {
 }
 
 /// A `UnverifiedTransaction` with successfully recovered `sender`.
-#[derive(Debug, Clone, Eq, PartialEq, MallocSizeOf)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, MallocSizeOf)]
 pub struct SignedTransaction {
 	transaction: UnverifiedTransaction,
 	sender: Address,
@@ -456,6 +456,10 @@ impl SignedTransaction {
 				public: Some(public),
 			})
 		}
+	}
+	/// Get the hash of this transaction (keccak of the RLP).
+	pub fn hash(&self) -> H256 {
+		self.transaction.hash()
 	}
 
 	/// Returns transaction sender.
