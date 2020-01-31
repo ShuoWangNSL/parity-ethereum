@@ -112,7 +112,8 @@ bundle_test_spec! {
 	"null_morden_with_finality" => new_test_with_finality,
 	"validator_contract" => new_validator_contract,
 	"validator_multi" => new_validator_multi,
-	"validator_safe_contract" => new_validator_safe_contract
+	"validator_safe_contract" => new_validator_safe_contract,
+	"ethereum/prism_test" => new_prism_test
 }
 
 bundle_test_machine! {
@@ -123,7 +124,8 @@ bundle_test_machine! {
 	"ethereum/frontier_test" => new_frontier_test_machine,
 	"ethereum/homestead_test" => new_homestead_test_machine,
 	"ethereum/kovan_wasm_test" => new_kovan_wasm_test_machine,
-	"null_morden" => new_test_machine
+	"null_morden" => new_test_machine,
+	"ethereum/prism_test" => new_prism_test_machine
 }
 
 #[cfg(test)]
