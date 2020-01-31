@@ -28,6 +28,9 @@ use rlp::{self, RlpStream, Rlp, DecoderError, Encodable};
 
 use transaction::error;
 
+extern crate serde_derive;
+use self::serde_derive::{Serialize, Deserialize};
+
 type Bytes = Vec<u8>;
 type BlockNumber = u64;
 
@@ -38,7 +41,7 @@ pub const UNSIGNED_SENDER: Address = H160([0xff; 20]);
 pub const SYSTEM_ADDRESS: Address = H160([0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,0xff, 0xff, 0xff, 0xff,0xff, 0xff, 0xff, 0xff,0xff, 0xff, 0xff, 0xfe]);
 
 /// Transaction action type.
-#[derive(Debug, Clone, PartialEq, Eq, MallocSizeOf)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, MallocSizeOf)]
 pub enum Action {
 	/// Create creates new contract.
 	Create,
@@ -104,7 +107,7 @@ pub mod signature {
 
 /// A set of information describing an externally-originating message call
 /// or contract creation operation.
-#[derive(Default, Debug, Clone, PartialEq, Eq, MallocSizeOf)]
+#[derive(Serialize, Deserialize, Default, Debug, Clone, PartialEq, Eq, MallocSizeOf)]
 pub struct Transaction {
 	/// Nonce.
 	pub nonce: U256,
@@ -258,7 +261,7 @@ impl Transaction {
 }
 
 /// Signed transaction information without verified signature.
-#[derive(Debug, Clone, Eq, PartialEq, MallocSizeOf)]
+#[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq, MallocSizeOf)]
 pub struct UnverifiedTransaction {
 	/// Plain Transaction.
 	unsigned: Transaction,
@@ -412,7 +415,7 @@ impl UnverifiedTransaction {
 }
 
 /// A `UnverifiedTransaction` with successfully recovered `sender`.
-#[derive(Debug, Clone, Eq, PartialEq, MallocSizeOf)]
+#[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq, MallocSizeOf)]
 pub struct SignedTransaction {
 	transaction: UnverifiedTransaction,
 	sender: Address,
@@ -470,6 +473,11 @@ impl SignedTransaction {
 	pub fn deconstruct(self) -> (UnverifiedTransaction, Address, Option<Public>) {
 		(self.transaction, self.sender, self.public)
 	}
+
+        /// Get the hash of this transaction (keccak of the RLP).
+        pub fn hash(&self) -> H256 {
+            self.transaction.hash()
+        }
 }
 
 /// Signed Transaction that is a part of canon blockchain.
